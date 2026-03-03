@@ -105,27 +105,31 @@
   </main>
 
   <script>
-    const $ = (sel) => document.querySelector(sel);
+    const $ = sel => document.querySelector(sel);
 
-    const state = {
-      works: [],
-      tagSet: new Set(),
-      activeTag: null,
-      q: ""
-    };
+    const state = { works: [], tagSet: new Set(), activeTag: null, q: "" };
 
-    function normalize(s) {
-      return (s || "").toString().trim();
+    // ── Helpers ──────────────────────────────────────────────────────────
+
+    function norm(s) { return (s || "").toString().trim().toLowerCase(); }
+
+    function getWorkUrl(work) {
+      if (work.url) return work.url;
+      if (work.id)  return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
+      return "#";
     }
+
+    // ── Matching ─────────────────────────────────────────────────────────
 
     function matchesQuery(work, q) {
       if (!q) return true;
       const hay = [
         work.title, work.summary,
         ...(work.tags || []),
-        work.status, work.type
-      ].map(x => normalize(x).toLowerCase()).join(" · ");
-      return hay.includes(q.toLowerCase());
+        work.status === "serial" ? "连载" : "完结",
+        work.type   === "short"  ? "短篇" : "中长篇",
+      ].map(norm).join(" ");
+      return hay.includes(norm(q));
     }
 
     function matchesTag(work, tag) {
@@ -133,105 +137,83 @@
       return (work.tags || []).includes(tag);
     }
 
-   function getWorkUrl(work) {
-  if (work.url) return work.url;                              // 外链优先
-  if (work.id)  return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
-  return "#";
-    }
+    // ── Rendering ────────────────────────────────────────────────────────
 
     function renderWorkItem(work) {
-      const url = getWorkUrl(work);
-
-      const metaLeft = [];
-      metaLeft.push(work.date ? work.date : "");
-      metaLeft.push(work.status === "serial" ? "连载" : "完结");
-      metaLeft.push(work.type === "short" ? "短篇" : "中长篇");
-
-      const chapterInfo = (work.type !== "short" && work.chapters)
-        ? `${work.chapters.length} 章`
-        : "";
-
-      const tags = (work.tags || []).map(t => `<button class="tag" type="button" data-tag="${t}">${t}</button>`).join("");
+      const url         = getWorkUrl(work);
+      const statusLabel = work.status === "serial" ? "连载" : "完结";
+      const typeLabel   = work.type   === "short"  ? "短篇" : "中长篇";
+      const chCount     = work.chapterCount ? `${work.chapterCount} 章` : "";
+      const meta        = [work.date, statusLabel, typeLabel].filter(Boolean).join(" · ");
+      const tags        = (work.tags || [])
+        .map(t => `<button class="tag" type="button" data-tag="${t}">${t}</button>`)
+        .join("");
 
       return `
         <article class="work">
           <div class="work__top">
             <a class="work__title" href="${url}">${work.title}</a>
             <div class="work__meta">
-              <span>${metaLeft.filter(Boolean).join(" · ")}</span>
-              ${chapterInfo ? `<span class="meta-right">${chapterInfo}</span>` : ""}
+              <span>${meta}</span>
+              ${chCount ? `<span class="meta-right">${chCount}</span>` : ""}
             </div>
           </div>
-
           ${work.summary ? `<p class="work__summary">${work.summary}</p>` : ""}
-
-          ${tags ? `<div class="tagrow">${tags}</div>` : ""}
-        </article>
-      `;
-    }
-
-    function setResultInfo(text) {
-      $("#resultInfo").textContent = text;
-    }
-
-    function clearLists() {
-      $("#list-serial").innerHTML = "";
-      $("#list-complete-long").innerHTML = "";
-      $("#list-complete-short").innerHTML = "";
+          ${tags         ? `<div class="tagrow">${tags}</div>`            : ""}
+        </article>`;
     }
 
     function renderChips() {
-      const tags = Array.from(state.tagSet);
-      tags.sort((a,b) => a.localeCompare(b, "zh-CN"));
-      const chipHtml = tags.map(t => {
-        const active = (state.activeTag === t) ? "chip chip--active" : "chip";
-        return `<button type="button" class="${active}" data-chip="${t}">${t}</button>`;
-      }).join("");
-      $("#chips").innerHTML = chipHtml || `<span class="muted">（还没有 tag）</span>`;
+      const tags = [...state.tagSet].sort((a, b) => a.localeCompare(b, "zh-CN"));
+      $("#chips").innerHTML = tags
+        .map(t => `<button type="button" class="chip${state.activeTag === t ? " chip--active" : ""}" data-chip="${t}">${t}</button>`)
+        .join("") || `<span class="muted">（还没有 tag）</span>`;
     }
 
     function applyFilters() {
-      clearLists();
-
-      const filtered = state.works.filter(w => matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
-
-      // 分区
-      const serial = filtered.filter(w => w.status === "serial");
+      const filtered     = state.works.filter(w => matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
+      const serial       = filtered.filter(w => w.status === "serial");
       const completeLong = filtered.filter(w => w.status === "complete" && w.type === "long");
-      const completeShort = filtered.filter(w => w.status === "complete" && w.type === "short");
+      const completeShort= filtered.filter(w => w.status === "complete" && w.type === "short");
 
-      $("#list-serial").innerHTML = serial.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
-      $("#list-complete-long").innerHTML = completeLong.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
-      $("#list-complete-short").innerHTML = completeShort.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+      const render = list =>
+        list.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
 
-      const tagText = state.activeTag ? ` · tag=${state.activeTag}` : "";
-      const qText = state.q ? ` · 搜索="${state.q}"` : "";
-      setResultInfo(`共 ${filtered.length} 篇${tagText}${qText}`);
+      $("#list-serial").innerHTML        = render(serial);
+      $("#list-complete-long").innerHTML = render(completeLong);
+      $("#list-complete-short").innerHTML= render(completeShort);
 
-      // 给文章 tag 按钮绑定点击（事件委托）
-      document.querySelectorAll("[data-tag]").forEach(btn => {
-        btn.onclick = () => {
-          state.activeTag = btn.getAttribute("data-tag");
-          renderChips();
-          applyFilters();
-          window.scrollTo({ top: 0, behavior: "smooth" });
-        };
-      });
+      const tagText = state.activeTag ? ` · tag: ${state.activeTag}` : "";
+      const qText   = state.q         ? ` · 搜索: "${state.q}"`      : "";
+      $("#resultInfo").textContent = `共 ${filtered.length} 篇${tagText}${qText}`;
     }
 
+    // ── UI Bindings (set up once, use event delegation for dynamic elements) ──
+
     function bindUI() {
-      $("#q").addEventListener("input", (e) => {
+      $("#q").addEventListener("input", e => {
         state.q = e.target.value.trim();
         applyFilters();
       });
 
-      $("#chips").addEventListener("click", (e) => {
+      // Tag filter chips
+      $("#chips").addEventListener("click", e => {
         const b = e.target.closest("[data-chip]");
         if (!b) return;
         const tag = b.getAttribute("data-chip");
-        state.activeTag = (state.activeTag === tag) ? null : tag;
+        state.activeTag = state.activeTag === tag ? null : tag;
         renderChips();
         applyFilters();
+      });
+
+      // In-card tag buttons (event delegation — no per-render rebinding)
+      $(".sections").addEventListener("click", e => {
+        const b = e.target.closest("[data-tag]");
+        if (!b) return;
+        state.activeTag = b.getAttribute("data-tag");
+        renderChips();
+        applyFilters();
+        window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
       $("#resetBtn").addEventListener("click", () => {
@@ -243,22 +225,20 @@
       });
     }
 
+    // ── Init ─────────────────────────────────────────────────────────────
+
     async function init() {
       bindUI();
-
       try {
-        const res = await fetch("/data/works.json", { cache: "no-store" });
+        const res   = await fetch("/data/works.json", { cache: "no-store" });
         const works = await res.json();
-
-        state.works = Array.isArray(works) ? works : [];
-        state.tagSet = new Set();
-        state.works.forEach(w => (w.tags || []).forEach(t => state.tagSet.add(t)));
-
+        state.works  = Array.isArray(works) ? works : [];
+        state.tagSet = new Set(state.works.flatMap(w => w.tags || []));
         renderChips();
         applyFilters();
       } catch (err) {
         console.error(err);
-        setResultInfo("读取 works.json 失败：请检查 /data/works.json 是否存在且是合法 JSON");
+        $("#resultInfo").textContent = "读取 works.json 失败，请检查文件是否存在且格式正确";
       }
     }
 

@@ -1,54 +1,30 @@
 [
-{
-  "id": "ruby",
-  "title": "【朝耀】RUBY.",
-  "status": "serial",
-  "type": "long",
-  "date": "2026-02-26",
-  "summary": "普设｜31朝｜耀儿这个伪装完美情人，精神控制朝，试图榨取钱财",
-  "tags": ["China/England", "Hetalia", "Not Rated"]
-},
   {
-  "id": "panda_imbiss",
-  "title": "【朝耀/奥黯】Panda Imbiss",
-  "status": "complete",
-  "type": "long",
-  "date": "2025-07-30",
-  "summary": "乱伦网黄供电组兄弟 / 纯情朝奥兄弟（奥是大学生）",
-  "tags": [
-    "China/England",
-    "China/China",
-    "China",
-    "England",
-    "Not Rated",
-    "Hetalia"
-  ],
-  "chapters": [
-    {
-      "title": "Read",
-      "url": "/work.html?id=panda_imbiss#ch=1"
-    }
-  ]
-},
-{
-  "id": "tanbai",
-  "title": "【朝耀】“坦白来说第一眼我就爱上你了。”",
-  "status": "complete",
-  "type": "short",
-  "date": "2025-12-19",
-  "summary": "圣诞节企划。国设朝 × 普设耀。二十九年婚姻。",
-  "tags": [
-    "China/England",
-    "China",
-    "England",
-    "Not Rated",
-    "Hetalia"
-  ],
-  "chapters": [
-    {
-      "title": "Read",
-      "url": "/work.html?id=tanbai#ch=1"
-    }
-  ]
-}
+    "id": "ruby",
+    "title": "【朝耀】RUBY.",
+    "status": "serial",
+    "type": "long",
+    "date": "2026-02-26",
+    "summary": "普设｜31朝｜耀儿这个伪装完美情人，精神控制朝，试图榨取钱财",
+    "tags": ["China/England", "Hetalia", "Not Rated"]
+  },
+  {
+    "id": "panda_imbiss",
+    "title": "【朝耀/奥黯】Panda Imbiss",
+    "status": "complete",
+    "type": "long",
+    "date": "2025-07-30",
+    "chapterCount": 23,
+    "summary": "乱伦网黄供电组兄弟 / 纯情朝奥兄弟（奥是大学生）",
+    "tags": ["China/England", "China/China", "China", "England", "Not Rated", "Hetalia"]
+  },
+  {
+    "id": "tanbai",
+    "title": "【朝耀】\u201c坦白来说第一眼我就爱上你了。\u201d",
+    "status": "complete",
+    "type": "short",
+    "date": "2025-12-19",
+    "summary": "圣诞节企划。国设朝 × 普设耀。二十九年婚姻。",
+    "tags": ["China/England", "China", "England", "Not Rated", "Hetalia"]
+  }
 ]
