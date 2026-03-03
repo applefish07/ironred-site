@@ -134,15 +134,14 @@
       return (work.tags || []).includes(tag);
     }
 
-    function getWorkUrl(work) {
-      // 短篇：work.url
-      if (work.type === "short" && work.url) return work.url;
+   function getWorkUrl(work) {
+  // 短篇：仍然用 work.url
+  if (work.type === "short" && work.url) return work.url;
 
-      // 长篇：优先跳第一章
-      if (work.chapters && work.chapters.length) return work.chapters[0].url;
+  // 长篇：统一进单页阅读器
+  if (work.type === "long") return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
 
-      // 兜底
-      return "#";
+  return "#";
     }
 
     function renderWorkItem(work) {

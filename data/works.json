@@ -1,17 +1,13 @@
 [
-  {
-    "id": "serial-001",
-    "title": "连载示例：铁与红（连载中）",
-    "status": "serial",
-    "type": "long",
-    "date": "2026-03-03",
-    "summary": "一句话简介。这里写 AO3 风格的简短摘要。",
-    "tags": ["CP:A/B", "角色:X", "分级:R18", "Fandom:XXX", "Warning:自定义"],
-    "chapters": [
-      { "title": "第1章", "url": "/works/serial-001-01.html" },
-      { "title": "第2章", "url": "/works/serial-001-02.html" }
-    ]
-  },
+{
+  "id": "ruby",
+  "title": "【朝耀】RUBY.",
+  "status": "serial",
+  "type": "long",
+  "date": "2026-02-26",
+  "summary": "普设｜31朝/19耀",
+  "tags": ["China/England", "Hetalia", "Not Rated", "WIP"]
+},
   {
     "id": "complete-001",
     "title": "完结长篇示例：某个故事（完结）",
@@ -43,14 +39,5 @@
     "summary": "短篇一句话。",
     "tags": ["CP:C/D", "分级:M", "Fandom:XXX"],
     "url": "/works/short-002.html"
-  },
-    {
-    "id": "ruby",
-    "title": "【朝耀】RUBY.",
-    "bucket": "serial",
-    "updated": "2026-02-26",
-    "words": 11944,
-    "summary": "普设｜31朝/19耀",
-    "tags": ["China/England", "Hetalia", "Not Rated", "WIP"]
   }
 ]
