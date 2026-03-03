@@ -318,10 +318,20 @@ a.brand:hover .brand__name {
   }
 }
 
-@media (max-width: 520px){
-  .site-header{ padding: 10px 12px; }
-  .brand__name{ font-size: 12px; letter-spacing: 1px; }
+@media (max-width: 640px){
+  .site-header{
+    flex-wrap: wrap;
+    padding: 8px 14px;
+    gap: 2px 0;
+  }
+  .brand__name{ font-size: 13px; letter-spacing: 1px; }
   .brand__sub{ font-size: 8px; letter-spacing: 0.5px; margin-top: 2px; }
-  .topnav{ gap: 2px; font-size: 12px; }
-  .topnav a{ padding: 6px 7px; }
+  .topnav{
+    width: 100%;
+    gap: 0;
+    font-size: 12px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .topnav a{ padding: 5px 8px; }
 }
