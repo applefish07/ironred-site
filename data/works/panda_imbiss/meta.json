@@ -1,21 +1,42 @@
 {
-  "id": "ruby",
+  "id": "panda_imbiss",
   "title": "【朝耀/奥黯】Panda Imbiss",
-  "status": "完结",
-  "type": "complete",
-  "words": 11944,
-  "updated": "2026-02-26",
-  "summary": "普设\n\n31朝/19耀\n耀儿这个伪装完美情人，精神控制朝，试图榨取钱财",
+  "status": "complete",
+  "type": "long",
+  "updated": "2025-07-30",
+  "words": 51375,
+  "summary": "乱伦网黄供电组兄弟 / 纯情朝奥兄弟（奥是大学生）",
   "tags": {
-    "cp": ["China/England"],
+    "cp": ["China/England", "China/China"],
     "characters": ["China", "England"],
     "rating": ["Not Rated"],
     "fandom": ["Hetalia"],
-    "warnings": ["No Archive Warnings Apply"]
+    "warnings": ["Creator Chose Not To Use Archive Warnings"],
+    "custom": ["异色", "奥黯", "朝耀", "有供电乱伦情结", "雷乱伦的快逃", "黄文", "总之一个大乱操"]
   },
   "chapters": [
-    { "n": 1, "title": "Chapter 1", "src": "/data/works/ruby/1.html" },
-    { "n": 2, "title": "Chapter 2", "src": "/data/works/ruby/2.html" },
-    { "n": 3, "title": "Chapter 3", "src": "/data/works/ruby/3.html" }
+    { "n": 1, "title": "Chapter 1", "src": "/data/works/panda_imbiss/1.html" },
+    { "n": 2, "title": "Chapter 2", "src": "/data/works/panda_imbiss/2.html" },
+    { "n": 3, "title": "Chapter 3", "src": "/data/works/panda_imbiss/3.html" },
+    { "n": 4, "title": "Chapter 4", "src": "/data/works/panda_imbiss/4.html" },
+    { "n": 5, "title": "Chapter 5", "src": "/data/works/panda_imbiss/5.html" },
+    { "n": 6, "title": "Chapter 6", "src": "/data/works/panda_imbiss/6.html" },
+    { "n": 7, "title": "Chapter 7", "src": "/data/works/panda_imbiss/7.html" },
+    { "n": 8, "title": "Chapter 8", "src": "/data/works/panda_imbiss/8.html" },
+    { "n": 9, "title": "Chapter 9", "src": "/data/works/panda_imbiss/9.html" },
+    { "n": 10, "title": "Chapter 10", "src": "/data/works/panda_imbiss/10.html" },
+    { "n": 11, "title": "Chapter 11", "src": "/data/works/panda_imbiss/11.html" },
+    { "n": 12, "title": "Chapter 12", "src": "/data/works/panda_imbiss/12.html" },
+    { "n": 13, "title": "Chapter 13", "src": "/data/works/panda_imbiss/13.html" },
+    { "n": 14, "title": "Chapter 14", "src": "/data/works/panda_imbiss/14.html" },
+    { "n": 15, "title": "Chapter 15", "src": "/data/works/panda_imbiss/15.html" },
+    { "n": 16, "title": "Chapter 16", "src": "/data/works/panda_imbiss/16.html" },
+    { "n": 17, "title": "Chapter 17", "src": "/data/works/panda_imbiss/17.html" },
+    { "n": 18, "title": "Chapter 18", "src": "/data/works/panda_imbiss/18.html" },
+    { "n": 19, "title": "Chapter 19", "src": "/data/works/panda_imbiss/19.html" },
+    { "n": 20, "title": "Chapter 20", "src": "/data/works/panda_imbiss/20.html" },
+    { "n": 21, "title": "Chapter 21", "src": "/data/works/panda_imbiss/21.html" },
+    { "n": 22, "title": "Chapter 22", "src": "/data/works/panda_imbiss/22.html" },
+    { "n": 23, "title": "Chapter 23", "src": "/data/works/panda_imbiss/23.html" }
   ]
 }

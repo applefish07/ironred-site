@@ -9,17 +9,27 @@
   "tags": ["China/England", "Hetalia", "Not Rated"]
 },
   {
-    "id": "complete-001",
-    "title": "完结长篇示例：某个故事（完结）",
-    "status": "complete",
-    "type": "long",
-    "date": "2026-02-20",
-    "summary": "完结长篇简介。",
-    "tags": ["CP:A/B", "角色:Y", "分级:M", "Fandom:XXX"],
-    "chapters": [
-      { "title": "第1章", "url": "/works/complete-001-01.html" }
-    ]
-  },
+  "id": "panda_imbiss",
+  "title": "【朝耀/奥黯】Panda Imbiss",
+  "status": "complete",
+  "type": "long",
+  "date": "2025-07-30",
+  "summary": "乱伦网黄供电组兄弟 / 纯情朝奥兄弟（奥是大学生）",
+  "tags": [
+    "China/England",
+    "China/China",
+    "China",
+    "England",
+    "Not Rated",
+    "Hetalia"
+  ],
+  "chapters": [
+    {
+      "title": "Read",
+      "url": "/work.html?id=panda_imbiss#ch=1"
+    }
+  ]
+},
   {
     "id": "short-001",
     "title": "短篇示例 1（完结）",
