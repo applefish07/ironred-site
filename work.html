@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Work</title>
+  <link rel="stylesheet" href="/style.css" />
+  <style>
+    /* 轻度“B：有一点点设计”，黑+少量红，移动端优先 */
+    .wrap{max-width:720px;margin:0 auto;padding:16px}
+    .crumb a{color:var(--red);text-decoration:none}
+    .title{font-size:28px;margin:10px 0}
+    .meta{opacity:.85;font-size:14px;line-height:1.6}
+    .tags{margin:10px 0;display:flex;flex-wrap:wrap;gap:8px}
+    .tag{border:1px solid rgba(255,255,255,.2);padding:4px 8px;border-radius:999px;font-size:12px}
+    .controls{display:flex;gap:8px;align-items:center;margin:14px 0}
+    select,button{background:#111;color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px;border-radius:10px}
+    button{cursor:pointer}
+    button:hover{border-color:rgba(255,255,255,.35)}
+    .content{line-height:1.9;font-size:16px}
+    .content p{margin:0 0 12px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="crumb"><a href="/index.html">← Back to Works</a></div>
+
+    <h1 class="title" id="workTitle">Loading…</h1>
+    <div class="meta" id="workMeta"></div>
+
+    <div class="tags" id="workTags"></div>
+
+    <div class="controls">
+      <button id="prevBtn">← Prev</button>
+      <select id="chapterSelect"></select>
+      <button id="nextBtn">Next →</button>
+    </div>
+
+    <div class="content" id="chapterContent"></div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  function getWorkId(){
+    const u = new URL(location.href);
+    return u.searchParams.get("id") || "ruby";
+  }
+  function getChapterFromHash(){
+    const m = location.hash.match(/ch=(\d+)/);
+    return m ? Number(m[1]) : 1;
+  }
+  function setChapterHash(n){
+    location.hash = `ch=${n}`;
+  }
+
+  function renderTags(tagsObj){
+    const tagList = [];
+    for (const [group, arr] of Object.entries(tagsObj || {})){
+      for (const t of arr) tagList.push(`${group}:${t}`);
+    }
+    $("workTags").innerHTML = tagList.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
+    }[c]));
+  }
+
+  async function loadWork(){
+    const id = getWorkId();
+    const res = await fetch(`/data/works/${id}/meta.json`, { cache: "no-store" });
+    if(!res.ok) throw new Error("Work json not found");
+    const work = await res.json();
+
+    document.title = work.title;
+    $("workTitle").textContent = work.title;
+
+    $("workMeta").textContent =
+      `${work.status} · ${work.words ?? "-"} words · updated ${work.updated ?? "-"}`;
+
+    renderTags(work.tags);
+
+    // chapters dropdown
+    $("chapterSelect").innerHTML = work.chapters.map(ch =>
+      `<option value="${ch.n}">${ch.n}. ${escapeHtml(ch.title || ("Chapter " + ch.n))}</option>`
+    ).join("");
+
+    const maxCh = work.chapters.length;
+
+    async function renderChapter(n){
+      n = Math.min(Math.max(1, n), maxCh);
+      $("chapterSelect").value = String(n);
+      $("prevBtn").disabled = (n <= 1);
+      $("nextBtn").disabled = (n >= maxCh);
+
+      const ch = work.chapters.find(x => x.n === n);
+      const html = await (await fetch(ch.src, { cache: "no-store" })).text();
+      $("chapterContent").innerHTML = html;
+
+      setChapterHash(n);
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+
+    $("chapterSelect").addEventListener("change", e => renderChapter(Number(e.target.value)));
+    $("prevBtn").addEventListener("click", () => renderChapter(getChapterFromHash() - 1));
+    $("nextBtn").addEventListener("click", () => renderChapter(getChapterFromHash() + 1));
+
+    window.addEventListener("hashchange", () => renderChapter(getChapterFromHash()));
+
+    // init
+    await renderChapter(getChapterFromHash());
+  }
+
+  loadWork().catch(err => {
+    $("workTitle").textContent = "加载失败";
+    $("workMeta").textContent = err.message;
+  });
+</script>
+</body>
+</html>

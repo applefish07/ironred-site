@@ -1,0 +1,22 @@
+{
+  "id": "ruby",
+  "title": "【朝耀】RUBY.",
+  "status": "WIP",
+  "type": "serial",
+  "words": 11944,
+  "updated": "2026-02-26",
+  "summary": "普设\n\n31朝/19耀\n耀儿这个伪装完美情人，精神控制朝，试图榨取钱财",
+  "tags": {
+    "cp": ["China/England"],
+    "characters": ["China", "England"],
+    "rating": ["Not Rated"],
+    "fandom": ["Hetalia"],
+    "warnings": ["No Archive Warnings Apply"],
+    "custom": ["普设", "31朝/19耀"]
+  },
+  "chapters": [
+    { "n": 1, "title": "Chapter 1", "src": "/data/chapters/ruby-1.html" },
+    { "n": 2, "title": "Chapter 2", "src": "/data/chapters/ruby-2.html" },
+    { "n": 3, "title": "Chapter 3", "src": "/data/chapters/ruby-3.html" }
+  ]
+}
