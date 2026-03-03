@@ -3,119 +3,334 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Work</title>
+  <title>Work — IRONRED</title>
   <link rel="stylesheet" href="/style.css" />
   <style>
-    /* 轻度“B：有一点点设计”，黑+少量红，移动端优先 */
-    .wrap{max-width:720px;margin:0 auto;padding:16px}
-    .crumb a{color:var(--red);text-decoration:none}
-    .title{font-size:28px;margin:10px 0}
-    .meta{opacity:.85;font-size:14px;line-height:1.6}
-    .tags{margin:10px 0;display:flex;flex-wrap:wrap;gap:8px}
-    .tag{border:1px solid rgba(255,255,255,.2);padding:4px 8px;border-radius:999px;font-size:12px}
-    .controls{display:flex;gap:8px;align-items:center;margin:14px 0}
-    select,button{background:#111;color:#fff;border:1px solid rgba(255,255,255,.2);padding:10px;border-radius:10px}
-    button{cursor:pointer}
-    button:hover{border-color:rgba(255,255,255,.35)}
-    .content{line-height:1.9;font-size:16px}
-    .content p{margin:0 0 12px}
+    /* ── Work page specific ── */
+
+    /* Mini header bar */
+    .work-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 18px;
+      backdrop-filter: blur(10px);
+      background: rgba(11,11,12,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .work-bar__brand {
+      font-family: 'Cinzel Decorative', serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #8b1a1a;
+      letter-spacing: 2px;
+      text-decoration: none;
+      text-shadow: 0 0 24px rgba(139,26,26,0.45);
+      transition: color 0.15s ease;
+    }
+    .work-bar__brand:hover { color: #b52424; }
+    .work-bar__back {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .work-bar__back:hover {
+      color: var(--text);
+      border-color: rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.04);
+    }
+
+    /* Page layout */
+    .work-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 18px 80px;
+    }
+
+    /* Work header */
+    .work-head { margin-bottom: 20px; }
+    .work-head__title {
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.35;
+      margin: 0 0 10px;
+      letter-spacing: 0.2px;
+    }
+    .work-head__meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .work-head__tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 14px;
+    }
+    .work-head__tag {
+      font-size: 12px;
+      color: rgba(255,255,255,0.78);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 20px 0;
+    }
+
+    /* Chapter navigation */
+    .ch-nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .ch-nav--foot {
+      margin-bottom: 0;
+      margin-top: 0;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+    .ch-btn {
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 9px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 13px;
+      white-space: nowrap;
+      transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+    .ch-btn:hover:not(:disabled) {
+      border-color: rgba(209,42,42,0.5);
+      background: rgba(209,42,42,0.08);
+    }
+    .ch-btn:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+    .ch-sel {
+      flex: 1;
+      min-width: 0;
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.12);
+      padding: 9px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .ch-sel:focus {
+      outline: none;
+      border-color: rgba(209,42,42,0.45);
+      box-shadow: 0 0 0 3px rgba(209,42,42,0.10);
+    }
+    .ch-prog {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    /* Chapter content */
+    .work-content {
+      padding: 20px 0 28px;
+      line-height: 2;
+      font-size: 16px;
+      color: rgba(233,233,234,0.92);
+      min-height: 160px;
+      transition: opacity 0.18s ease;
+    }
+    .work-content.fading { opacity: 0.25; }
+    .work-content p { margin: 0 0 14px; }
+    .work-content p:last-child { margin-bottom: 0; }
+
+    /* Error / empty state */
+    .state-center {
+      text-align: center;
+      padding: 80px 20px;
+    }
+    .state-center__title {
+      font-size: 20px;
+      margin: 0 0 8px;
+    }
+    .state-center__msg {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 20px;
+    }
   </style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="crumb"><a href="/index.html">← Back to Works</a></div>
+  <header class="work-bar">
+    <a class="work-bar__brand" href="/index.html">IRONRED</a>
+    <a class="work-bar__back" href="/index.html">← 返回列表</a>
+  </header>
 
-    <h1 class="title" id="workTitle">Loading…</h1>
-    <div class="meta" id="workMeta"></div>
-
-    <div class="tags" id="workTags"></div>
-
-    <div class="controls">
-      <button id="prevBtn">← Prev</button>
-      <select id="chapterSelect"></select>
-      <button id="nextBtn">Next →</button>
+  <div class="work-wrap">
+    <!-- Work metadata -->
+    <div class="work-head" id="workHead">
+      <h1 class="work-head__title" id="workTitle">Loading…</h1>
+      <div class="work-head__meta" id="workMeta"></div>
+      <div class="work-head__tags" id="workTags"></div>
     </div>
 
-    <div class="content" id="chapterContent"></div>
+    <hr class="divider" />
+
+    <!-- Top chapter navigation -->
+    <nav class="ch-nav" aria-label="章节导航">
+      <button class="ch-btn" id="prevBtn">← 上一章</button>
+      <select class="ch-sel" id="chapterSelect"></select>
+      <span class="ch-prog" id="chProg1"></span>
+      <button class="ch-btn" id="nextBtn">下一章 →</button>
+    </nav>
+
+    <!-- Chapter content -->
+    <div class="work-content" id="chapterContent"></div>
+
+    <!-- Bottom chapter navigation -->
+    <nav class="ch-nav ch-nav--foot" aria-label="章节导航（底部）">
+      <button class="ch-btn" id="prevBtn2">← 上一章</button>
+      <select class="ch-sel" id="chapterSelect2"></select>
+      <span class="ch-prog" id="chProg2"></span>
+      <button class="ch-btn" id="nextBtn2">下一章 →</button>
+    </nav>
   </div>
 
 <script>
-  const $ = (id) => document.getElementById(id);
+  const $ = id => document.getElementById(id);
 
-  function getWorkId(){
-    const u = new URL(location.href);
-    return u.searchParams.get("id") || "ruby";
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c =>
+      ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c])
+    );
   }
-  function getChapterFromHash(){
+
+  function getWorkId() {
+    return new URL(location.href).searchParams.get('id') || 'ruby';
+  }
+
+  function getChapterFromHash() {
     const m = location.hash.match(/ch=(\d+)/);
     return m ? Number(m[1]) : 1;
   }
-  function setChapterHash(n){
-    location.hash = `ch=${n}`;
+
+  function setChapterHash(n) {
+    history.replaceState(null, '', location.pathname + location.search + '#ch=' + n);
   }
 
-  function renderTags(tagsObj){
-    const tagList = [];
-    for (const [group, arr] of Object.entries(tagsObj || {})){
-      for (const t of arr) tagList.push(t);
+  function renderTags(tagsObj) {
+    const items = [];
+    for (const [, arr] of Object.entries(tagsObj || {})) {
+      for (const t of arr) items.push(t);
     }
-    $("workTags").innerHTML = tagList.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
+    $('workTags').innerHTML = items
+      .map(t => `<span class="work-head__tag">${escapeHtml(t)}</span>`)
+      .join('');
   }
 
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, c => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"
-    }[c]));
-  }
-
-  async function loadWork(){
+  async function loadWork() {
     const id = getWorkId();
-    const res = await fetch(`/data/works/${id}/meta.json`, { cache: "no-store" });
-    if(!res.ok) throw new Error("Work json not found");
+    const res = await fetch(`/data/works/${id}/meta.json`, { cache: 'no-store' });
+    if (!res.ok) throw new Error('找不到作品数据（' + res.status + '）');
     const work = await res.json();
 
-    document.title = work.title;
-    $("workTitle").textContent = work.title;
+    document.title = work.title + ' — IRONRED';
+    $('workTitle').textContent = work.title;
 
-    $("workMeta").textContent =
-      `${work.status} · ${work.words ?? "-"} words · updated ${work.updated ?? "-"}`;
+    const metaParts = [
+      work.status,
+      work.words != null ? Number(work.words).toLocaleString() + ' 字' : null,
+      work.updated ? '更新于 ' + work.updated : null,
+    ].filter(Boolean);
+    $('workMeta').innerHTML = metaParts.map(p => `<span>${escapeHtml(p)}</span>`).join('');
 
     renderTags(work.tags);
 
-    // chapters dropdown
-    $("chapterSelect").innerHTML = work.chapters.map(ch =>
-      `<option value="${ch.n}">${ch.n}. ${escapeHtml(ch.title || ("Chapter " + ch.n))}</option>`
-    ).join("");
-
+    // Populate both chapter selects
     const maxCh = work.chapters.length;
+    const opts = work.chapters
+      .map(ch => `<option value="${ch.n}">${ch.n}. ${escapeHtml(ch.title || 'Chapter ' + ch.n)}</option>`)
+      .join('');
+    $('chapterSelect').innerHTML = opts;
+    $('chapterSelect2').innerHTML = opts;
 
-    async function renderChapter(n){
-      n = Math.min(Math.max(1, n), maxCh);
-      $("chapterSelect").value = String(n);
-      $("prevBtn").disabled = (n <= 1);
-      $("nextBtn").disabled = (n >= maxCh);
+    let curCh = 0;
 
-      const ch = work.chapters.find(x => x.n === n);
-      const html = await (await fetch(ch.src, { cache: "no-store" })).text();
-      $("chapterContent").innerHTML = html;
-
-      setChapterHash(n);
-      window.scrollTo({ top: 0, behavior: "instant" });
+    function syncControls(n) {
+      ['', '2'].forEach(s => {
+        const sel  = $('chapterSelect' + s);
+        const prev = $('prevBtn' + s);
+        const next = $('nextBtn' + s);
+        const prog = $('chProg' + s);
+        if (sel)  sel.value      = String(n);
+        if (prev) prev.disabled  = n <= 1;
+        if (next) next.disabled  = n >= maxCh;
+        if (prog) prog.textContent = n + ' / ' + maxCh;
+      });
     }
 
-    $("chapterSelect").addEventListener("change", e => renderChapter(Number(e.target.value)));
-    $("prevBtn").addEventListener("click", () => renderChapter(getChapterFromHash() - 1));
-    $("nextBtn").addEventListener("click", () => renderChapter(getChapterFromHash() + 1));
+    async function goTo(n) {
+      n = Math.min(Math.max(1, n), maxCh);
+      if (n === curCh) return;
+      curCh = n;
+      syncControls(n);
 
-    window.addEventListener("hashchange", () => renderChapter(getChapterFromHash()));
+      const content = $('chapterContent');
+      content.classList.add('fading');
+      try {
+        const ch = work.chapters.find(x => x.n === n);
+        const html = await (await fetch(ch.src, { cache: 'no-store' })).text();
+        content.innerHTML = html;
+      } finally {
+        content.classList.remove('fading');
+      }
 
-    // init
-    await renderChapter(getChapterFromHash());
+      setChapterHash(n);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Bind all controls
+    ['', '2'].forEach(s => {
+      $('chapterSelect' + s).addEventListener('change', e => goTo(Number(e.target.value)));
+      $('prevBtn' + s).addEventListener('click', () => goTo(curCh - 1));
+      $('nextBtn' + s).addEventListener('click', () => goTo(curCh + 1));
+    });
+
+    window.addEventListener('hashchange', () => goTo(getChapterFromHash()));
+
+    await goTo(getChapterFromHash());
   }
 
   loadWork().catch(err => {
-    $("workTitle").textContent = "加载失败";
-    $("workMeta").textContent = err.message;
+    const wrap = document.querySelector('.work-wrap');
+    if (wrap) {
+      wrap.innerHTML = `
+        <div class="state-center">
+          <div class="state-center__title">加载失败</div>
+          <div class="state-center__msg">${escapeHtml(err.message)}</div>
+          <a href="/index.html" style="color:var(--red);font-size:14px;">← 返回作品列表</a>
+        </div>`;
+    }
   });
 </script>
 </body>

@@ -8,6 +8,7 @@
   --line:#23232a;
   --red:#d12a2a;
   --red2:#ff3b3b;
+  --red-dark: #8b1a1a;
 
   --radius:14px;
   --pad:16px;
@@ -28,6 +29,17 @@ body{
 
 a{ color:inherit; text-decoration:none; }
 a:hover{ color:var(--red2); }
+
+a, .tag, .chip, .btn, .topnav a {
+  transition: color 0.15s ease, border-color 0.15s ease,
+              background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.work {
+  transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+.input {
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
 
 code{
   background: rgba(255,255,255,0.06);
@@ -61,6 +73,7 @@ code{
   font-size: 18px;
   letter-spacing: 2px;
   color: #8b1a1a;
+  text-shadow: 0 0 28px rgba(139,26,26,0.5);
 }
 .brand__sub{
   font-size: 12px;
@@ -103,7 +116,9 @@ code{
 
 .h1{
   font-size: 18px;
-  margin:0;
+  margin: 0;
+  padding-left: 10px;
+  border-left: 2px solid var(--red);
 }
 .h2{
   font-size: 14px;
@@ -148,6 +163,7 @@ code{
 }
 .btn:hover{
   border-color: rgba(255,59,59,0.45);
+  background: rgba(209,42,42,0.08);
 }
 
 .chips{
@@ -196,6 +212,8 @@ code{
 }
 .work:hover{
   border-color: rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.035);
+  box-shadow: inset 3px 0 0 var(--red);
 }
 
 .work__title{
