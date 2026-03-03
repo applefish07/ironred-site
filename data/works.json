@@ -30,24 +30,25 @@
     }
   ]
 },
-  {
-    "id": "short-001",
-    "title": "短篇示例 1（完结）",
-    "status": "complete",
-    "type": "short",
-    "date": "2026-02-10",
-    "summary": "短篇一句话。",
-    "tags": ["CP:A/B", "分级:T", "Fandom:XXX"],
-    "url": "/works/short-001.html"
-  },
-  {
-    "id": "short-002",
-    "title": "短篇示例 2（完结）",
-    "status": "complete",
-    "type": "short",
-    "date": "2026-02-05",
-    "summary": "短篇一句话。",
-    "tags": ["CP:C/D", "分级:M", "Fandom:XXX"],
-    "url": "/works/short-002.html"
-  }
+{
+  "id": "tanbai",
+  "title": "【朝耀】“坦白来说第一眼我就爱上你了。”",
+  "status": "complete",
+  "type": "short",
+  "date": "2025-12-19",
+  "summary": "圣诞节企划。国设朝 × 普设耀。二十九年婚姻。",
+  "tags": [
+    "China/England",
+    "China",
+    "England",
+    "Not Rated",
+    "Hetalia"
+  ],
+  "chapters": [
+    {
+      "title": "Read",
+      "url": "/work.html?id=tanbai#ch=1"
+    }
+  ]
+}
 ]
