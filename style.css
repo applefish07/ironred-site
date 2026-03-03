@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,400&display=swap');
 
 :root{
   --bg:#0b0b0c;
@@ -68,17 +68,32 @@ code{
 }
 
 .brand__name{
-  font-family: 'Cinzel Decorative', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 2px;
+  font-size: 22px;
+  letter-spacing: 6px;
   color: #8b1a1a;
-  text-shadow: 0 0 28px rgba(139,26,26,0.5);
+  line-height: 1;
+  text-transform: uppercase;
+  text-shadow: 0 0 32px rgba(139,26,26,0.45);
+  transition: color 0.15s ease;
 }
 .brand__sub{
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 2px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: rgba(163,163,170,0.7);
+  margin-top: 4px;
+  padding-left: 1px;
+}
+a.brand {
+  text-decoration: none;
+  display: block;
+}
+a.brand:hover .brand__name {
+  color: #b32020;
 }
 
 .topnav{
