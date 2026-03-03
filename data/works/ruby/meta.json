@@ -1,7 +1,7 @@
 {
   "id": "ruby",
   "title": "【朝耀】RUBY.",
-  "status": "WIP",
+  "status": "连载",
   "type": "serial",
   "words": 11944,
   "updated": "2026-02-26",
@@ -11,8 +11,7 @@
     "characters": ["China", "England"],
     "rating": ["Not Rated"],
     "fandom": ["Hetalia"],
-    "warnings": ["No Archive Warnings Apply"],
-    "custom": ["普设", "31朝/19耀"]
+    "warnings": ["No Archive Warnings Apply"]
   },
   "chapters": [
     { "n": 1, "title": "Chapter 1", "src": "/data/works/ruby/1.html" },
