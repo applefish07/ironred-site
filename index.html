@@ -1,56 +1,274 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="zh-CN">
 <head>
-    <title>Ironred</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ironred — Works</title>
+  <meta name="color-scheme" content="dark light" />
+  <link rel="stylesheet" href="/style.css" />
 </head>
+
 <body>
-<div class="container">
-
-<h1>Iron Red</h1>
-
-<h2>Works</h2>
-
-<!-- 连载 -->
-<div>
-    <h3><a href="works/serial-story/index.html">Title of Ongoing Work</a></h3>
-    <div class="meta">
-        Fandom: DC | Rating: M | Status: Ongoing | Chapters: 2/?
+  <header class="site-header">
+    <div class="brand">
+      <div class="brand__name">ironred</div>
+      <div class="brand__sub">Archive · Dark · Minimal</div>
     </div>
-    <div class="tags">
-        <a href="tags/dc.html">#DC</a>
-        <a href="tags/bruce-clark.html">#Bruce/Clark</a>
-        <a href="tags/angst.html">#Angst</a>
-    </div>
-</div>
 
-<hr>
+    <nav class="topnav" aria-label="Primary">
+      <a href="#works">Works</a>
+      <a href="#announcements">Announcements</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
 
-<!-- 完结长篇 -->
-<div>
-    <h3><a href="works/finished-novel/index.html">Title of Finished Novel</a></h3>
-    <div class="meta">
-        Fandom: DC | Rating: T | Status: Complete | Chapters: 2/2
-    </div>
-</div>
+  <main class="container">
+    <!-- Filter bar -->
+    <section class="panel" id="works">
+      <div class="panel__head">
+        <h1 class="h1">Works</h1>
+        <div class="muted">AO3-style list · mobile-first</div>
+      </div>
 
-<hr>
+      <div class="filters">
+        <input id="q" class="input" type="search" placeholder="搜索：标题 / 摘要 / tag（例：CP:A/B 或 分级:R18）" autocomplete="off" />
+        <div class="chips" id="chips"></div>
 
-<!-- 短篇 -->
-<div>
-    <h3><a href="works/short1.html">Short Story One</a></h3>
-    <div class="meta">
-        Fandom: DC | Rating: G | Words: 3k
-    </div>
-</div>
+        <div class="row row--wrap">
+          <button class="btn" id="resetBtn" type="button">清空筛选</button>
+          <span class="muted" id="resultInfo">加载中…</span>
+        </div>
+      </div>
 
-<div>
-    <h3><a href="works/short2.html">Short Story Two</a></h3>
-    <div class="meta">
-        Fandom: DC | Rating: M | Words: 5k
-    </div>
-</div>
+      <div class="sections">
+        <section class="works-section">
+          <h2 class="h2">连载区</h2>
+          <div class="worklist" id="list-serial"></div>
+        </section>
 
-</div>
+        <section class="works-section">
+          <h2 class="h2">完结区 · 中长篇</h2>
+          <div class="worklist" id="list-complete-long"></div>
+        </section>
+
+        <section class="works-section">
+          <h2 class="h2">完结区 · 短篇</h2>
+          <div class="worklist" id="list-complete-short"></div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Announcements -->
+    <section class="panel" id="announcements">
+      <div class="panel__head">
+        <h1 class="h1">Announcements</h1>
+        <div class="muted">出本 / 约稿 / 联系方式（这里允许放图）</div>
+      </div>
+
+      <div class="announce">
+        <div class="announce__media">
+          <!-- 你之后把图片放到 /assets/ ，然后改 src -->
+          <img src="/assets/cover-placeholder.jpg" alt="Announcement cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+          <div class="placeholder" style="display:none;">
+            <div class="placeholder__box">图片占位</div>
+            <div class="muted">把图片放到 <code>/assets/</code>，再改这里的 src</div>
+          </div>
+        </div>
+
+        <div class="announce__text">
+          <h2 class="h2">出本公告（示例）</h2>
+          <ul class="bullet">
+            <li>购买方式：……（之后你补）</li>
+            <li>发货范围：……</li>
+            <li>联系方式：……</li>
+          </ul>
+          <p class="muted">提示：公告区建议放封面/插图，正文区保持 AO3 风纯文本。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section class="panel" id="about">
+      <div class="panel__head">
+        <h1 class="h1">About</h1>
+        <div class="muted">简短介绍 + 站内规则</div>
+      </div>
+      <p class="text">
+        这里写作者简介、转载/搬运规则、tag 说明、分级说明等。
+      </p>
+    </section>
+
+    <footer class="footer">
+      <span class="muted">© ironred</span>
+      <span class="muted">·</span>
+      <a class="muted link" href="#works">Back to top</a>
+    </footer>
+  </main>
+
+  <script>
+    const $ = (sel) => document.querySelector(sel);
+
+    const state = {
+      works: [],
+      tagSet: new Set(),
+      activeTag: null,
+      q: ""
+    };
+
+    function normalize(s) {
+      return (s || "").toString().trim();
+    }
+
+    function matchesQuery(work, q) {
+      if (!q) return true;
+      const hay = [
+        work.title, work.summary,
+        ...(work.tags || []),
+        work.status, work.type
+      ].map(x => normalize(x).toLowerCase()).join(" · ");
+      return hay.includes(q.toLowerCase());
+    }
+
+    function matchesTag(work, tag) {
+      if (!tag) return true;
+      return (work.tags || []).includes(tag);
+    }
+
+    function getWorkUrl(work) {
+      // 短篇：work.url
+      if (work.type === "short" && work.url) return work.url;
+
+      // 长篇：优先跳第一章
+      if (work.chapters && work.chapters.length) return work.chapters[0].url;
+
+      // 兜底
+      return "#";
+    }
+
+    function renderWorkItem(work) {
+      const url = getWorkUrl(work);
+
+      const metaLeft = [];
+      metaLeft.push(work.date ? work.date : "");
+      metaLeft.push(work.status === "serial" ? "连载" : "完结");
+      metaLeft.push(work.type === "short" ? "短篇" : "中长篇");
+
+      const chapterInfo = (work.type !== "short" && work.chapters)
+        ? `${work.chapters.length} 章`
+        : "";
+
+      const tags = (work.tags || []).map(t => `<button class="tag" type="button" data-tag="${t}">${t}</button>`).join("");
+
+      return `
+        <article class="work">
+          <div class="work__top">
+            <a class="work__title" href="${url}">${work.title}</a>
+            <div class="work__meta">
+              <span>${metaLeft.filter(Boolean).join(" · ")}</span>
+              ${chapterInfo ? `<span class="meta-right">${chapterInfo}</span>` : ""}
+            </div>
+          </div>
+
+          ${work.summary ? `<p class="work__summary">${work.summary}</p>` : ""}
+
+          ${tags ? `<div class="tagrow">${tags}</div>` : ""}
+        </article>
+      `;
+    }
+
+    function setResultInfo(text) {
+      $("#resultInfo").textContent = text;
+    }
+
+    function clearLists() {
+      $("#list-serial").innerHTML = "";
+      $("#list-complete-long").innerHTML = "";
+      $("#list-complete-short").innerHTML = "";
+    }
+
+    function renderChips() {
+      const tags = Array.from(state.tagSet);
+      tags.sort((a,b) => a.localeCompare(b, "zh-CN"));
+      const chipHtml = tags.map(t => {
+        const active = (state.activeTag === t) ? "chip chip--active" : "chip";
+        return `<button type="button" class="${active}" data-chip="${t}">${t}</button>`;
+      }).join("");
+      $("#chips").innerHTML = chipHtml || `<span class="muted">（还没有 tag）</span>`;
+    }
+
+    function applyFilters() {
+      clearLists();
+
+      const filtered = state.works.filter(w => matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
+
+      // 分区
+      const serial = filtered.filter(w => w.status === "serial");
+      const completeLong = filtered.filter(w => w.status === "complete" && w.type === "long");
+      const completeShort = filtered.filter(w => w.status === "complete" && w.type === "short");
+
+      $("#list-serial").innerHTML = serial.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+      $("#list-complete-long").innerHTML = completeLong.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+      $("#list-complete-short").innerHTML = completeShort.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+
+      const tagText = state.activeTag ? ` · tag=${state.activeTag}` : "";
+      const qText = state.q ? ` · 搜索="${state.q}"` : "";
+      setResultInfo(`共 ${filtered.length} 篇${tagText}${qText}`);
+
+      // 给文章 tag 按钮绑定点击（事件委托）
+      document.querySelectorAll("[data-tag]").forEach(btn => {
+        btn.onclick = () => {
+          state.activeTag = btn.getAttribute("data-tag");
+          renderChips();
+          applyFilters();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+      });
+    }
+
+    function bindUI() {
+      $("#q").addEventListener("input", (e) => {
+        state.q = e.target.value.trim();
+        applyFilters();
+      });
+
+      $("#chips").addEventListener("click", (e) => {
+        const b = e.target.closest("[data-chip]");
+        if (!b) return;
+        const tag = b.getAttribute("data-chip");
+        state.activeTag = (state.activeTag === tag) ? null : tag;
+        renderChips();
+        applyFilters();
+      });
+
+      $("#resetBtn").addEventListener("click", () => {
+        state.q = "";
+        state.activeTag = null;
+        $("#q").value = "";
+        renderChips();
+        applyFilters();
+      });
+    }
+
+    async function init() {
+      bindUI();
+
+      try {
+        const res = await fetch("/data/works.json", { cache: "no-store" });
+        const works = await res.json();
+
+        state.works = Array.isArray(works) ? works : [];
+        state.tagSet = new Set();
+        state.works.forEach(w => (w.tags || []).forEach(t => state.tagSet.add(t)));
+
+        renderChips();
+        applyFilters();
+      } catch (err) {
+        console.error(err);
+        setResultInfo("读取 works.json 失败：请检查 /data/works.json 是否存在且是合法 JSON");
+      }
+    }
+
+    init();
+  </script>
 </body>
 </html>
