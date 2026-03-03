@@ -57,7 +57,7 @@
   function renderTags(tagsObj){
     const tagList = [];
     for (const [group, arr] of Object.entries(tagsObj || {})){
-      for (const t of arr) tagList.push(`${group}:${t}`);
+      for (const t of arr) tagList.push(t);
     }
     $("workTags").innerHTML = tagList.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join("");
   }
