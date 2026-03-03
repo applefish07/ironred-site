@@ -5,6 +5,7 @@
     "status": "serial",
     "type": "long",
     "date": "2026-02-26",
+    "chapterCount": 3,
     "summary": "普设｜31朝｜耀儿这个伪装完美情人，精神控制朝，试图榨取钱财",
     "tags": ["China/England", "Hetalia", "Not Rated"]
   },
@@ -26,5 +27,14 @@
     "date": "2025-12-19",
     "summary": "圣诞节企划。国设朝 × 普设耀。二十九年婚姻。",
     "tags": ["China/England", "China", "England", "Not Rated", "Hetalia"]
+  },
+  {
+    "id": "wozhu",
+    "title": "【【北美双子】喜欢就握住！",
+    "status": "complete",
+    "type": "short",
+    "date": "2025-12-28",
+    "summary": "圣国设，朋友点梗，手交",
+    "tags": ["America/Canada", "America", "Canada", "Not Rated", "Hetalia"]
   }
 ]

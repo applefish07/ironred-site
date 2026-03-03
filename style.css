@@ -70,20 +70,20 @@ code{
 .brand__name{
   font-family: 'Cormorant Garamond', serif;
   font-weight: 700;
-  font-size: 18px;
-  letter-spacing: 4px;
+  font-size: 15px;
+  letter-spacing: 3px;
   color: #8b1a1a;
   line-height: 1;
   text-transform: uppercase;
-  text-shadow: 0 0 28px rgba(139,26,26,0.45);
+  text-shadow: 0 0 22px rgba(139,26,26,0.45);
   transition: color 0.15s ease;
 }
 .brand__sub{
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   font-weight: 400;
-  font-size: 10px;
-  letter-spacing: 2px;
+  font-size: 9px;
+  letter-spacing: 1.5px;
   color: rgba(163,163,170,0.7);
   margin-top: 3px;
   padding-left: 1px;
@@ -323,8 +323,8 @@ a.brand:hover .brand__name {
 
 @media (max-width: 520px){
   .site-header{ padding: 10px 12px; }
-  .brand__name{ font-size: 15px; letter-spacing: 2px; }
-  .brand__sub{ font-size: 9px; letter-spacing: 1px; margin-top: 2px; }
+  .brand__name{ font-size: 13px; letter-spacing: 1px; }
+  .brand__sub{ font-size: 8px; letter-spacing: 1px; margin-top: 2px; }
   .topnav{ gap: 2px; font-size: 12px; }
   .topnav a{ padding: 6px 7px; }
 }
