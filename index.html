@@ -30,7 +30,7 @@
       </div>
 
       <div class="filters">
-        <input id="q" class="input" type="search" placeholder="搜索：标题 / 摘要 / tag（例：CP:A/B 或 分级:R18）" autocomplete="off" />
+        <input id="q" class="input" type="search" placeholder="搜索：标题/tag" autocomplete="off" />
         <div class="chips" id="chips"></div>
 
         <div class="row row--wrap">
@@ -134,12 +134,8 @@
     }
 
    function getWorkUrl(work) {
-  // 短篇：仍然用 work.url
-  if (work.type === "short" && work.url) return work.url;
-
-  // 长篇：统一进单页阅读器
-  if (work.type === "long") return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
-
+  if (work.url) return work.url;                              // 外链优先
+  if (work.id)  return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
   return "#";
     }
 
