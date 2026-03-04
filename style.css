@@ -95,17 +95,22 @@ a.brand:hover .brand__name {
 
 .topnav{
   display:flex;
-  gap: 12px;
-  font-size: 13px;
+  gap: 4px;
 }
 .topnav a{
-  padding: 8px 10px;
+  padding: 7px 11px;
   border-radius: 12px;
   border:1px solid transparent;
+  color: var(--red);
+  font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+  letter-spacing: 0.3px;
 }
 .topnav a:hover{
-  border-color: rgba(255,255,255,0.10);
-  background: rgba(255,255,255,0.04);
+  border-color: rgba(209,42,42,0.35);
+  background: rgba(209,42,42,0.08);
+  color: var(--red2);
 }
 
 .panel{
