@@ -6,6 +6,50 @@
   <title>IRONRED — Works</title>
   <meta name="color-scheme" content="dark light" />
   <link rel="stylesheet" href="/style.css" />
+  <style>
+  @media (max-width: 640px) {
+    .site-header { flex-direction: column; align-items: flex-start; justify-content: flex-start; padding: 8px 14px; gap: 4px; }
+    .brand__name { font-size: 13px; letter-spacing: 1px; }
+    .brand__sub  { font-size: 8px; letter-spacing: 0.5px; margin-top: 2px; }
+    .topnav { width: 100%; gap: 0; font-size: 12px; padding-top: 4px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .topnav a { padding: 5px 8px; }
+  }
+  /* Section toggle headers */
+  .section-toggle {
+    cursor: pointer;
+    user-select: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .section-toggle::after {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.18);
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+  }
+  .section-toggle:hover { color: var(--red2); }
+  .section-toggle:hover::after { background: rgba(255,59,59,0.5); }
+  .section-toggle--active { color: var(--red2); }
+  .section-toggle--active::after { background: var(--red2); }
+  /* Pagination */
+  .pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 14px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .pagination.hidden { display: none; }
+  /* Clamp work card tags to ~2 rows */
+  .tagrow { max-height: 68px; overflow: hidden; }
+  </style>
 </head>
 
 <body>
@@ -30,7 +74,7 @@
       </div>
 
       <div class="filters">
-        <input id="q" class="input" type="search" placeholder="搜索：标题/tag" autocomplete="off" />
+        <input id="q" class="input" type="search" placeholder="搜索：标题/tag （例：America,China/England）" autocomplete="off" />
         <div class="chips" id="chips"></div>
 
         <div class="row row--wrap">
@@ -41,20 +85,22 @@
 
       <div class="sections">
         <section class="works-section">
-          <h2 class="h2">连载区</h2>
+          <h2 class="h2 section-toggle" data-section="serial">连载区</h2>
           <div class="worklist" id="list-serial"></div>
         </section>
 
         <section class="works-section">
-          <h2 class="h2">完结区 · 中长篇</h2>
+          <h2 class="h2 section-toggle" data-section="complete-long">完结区 · 中长篇</h2>
           <div class="worklist" id="list-complete-long"></div>
         </section>
 
         <section class="works-section">
-          <h2 class="h2">完结区 · 短篇</h2>
+          <h2 class="h2 section-toggle" data-section="complete-short">完结区 · 短篇</h2>
           <div class="worklist" id="list-complete-short"></div>
         </section>
       </div>
+
+      <div class="pagination hidden" id="pagination"></div>
     </section>
 
     <!-- Announcements -->
@@ -107,7 +153,20 @@
   <script>
     const $ = sel => document.querySelector(sel);
 
-    const state = { works: [], tagSet: new Set(), activeTag: null, q: "" };
+    const PAGE_SIZE    = 5;
+    const PINNED_CHIPS = ["China/England", "America", "America/Russia", "England", "China"];
+    const SECTION_LABELS = {
+      "serial":         "连载区",
+      "complete-long":  "完结区 · 中长篇",
+      "complete-short": "完结区 · 短篇",
+    };
+    const SECTION_KEYS = ["serial", "complete-long", "complete-short"];
+
+    const state = {
+      works: [], tagSet: new Set(),
+      activeTag: null, q: "",
+      activeSection: null, page: 1,
+    };
 
     // ── Helpers ──────────────────────────────────────────────────────────
 
@@ -117,6 +176,12 @@
       if (work.url) return work.url;
       if (work.id)  return `/work.html?id=${encodeURIComponent(work.id)}#ch=1`;
       return "#";
+    }
+
+    function getSectionKey(w) {
+      if (w.status === "serial") return "serial";
+      if (w.status === "complete" && w.type === "long") return "complete-long";
+      return "complete-short";
     }
 
     // ── Matching ─────────────────────────────────────────────────────────
@@ -164,35 +229,101 @@
     }
 
     function renderChips() {
-      const tags = [...state.tagSet].sort((a, b) => a.localeCompare(b, "zh-CN"));
-      $("#chips").innerHTML = tags
+      const available = PINNED_CHIPS.filter(t => state.tagSet.has(t));
+      $("#chips").innerHTML = available
         .map(t => `<button type="button" class="chip${state.activeTag === t ? " chip--active" : ""}" data-chip="${t}">${t}</button>`)
         .join("") || `<span class="muted">（还没有 tag）</span>`;
     }
 
-    function applyFilters() {
-      const filtered     = state.works.filter(w => matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
-      const serial       = filtered.filter(w => w.status === "serial");
-      const completeLong = filtered.filter(w => w.status === "complete" && w.type === "long");
-      const completeShort= filtered.filter(w => w.status === "complete" && w.type === "short");
-
-      const render = list =>
-        list.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
-
-      $("#list-serial").innerHTML        = render(serial);
-      $("#list-complete-long").innerHTML = render(completeLong);
-      $("#list-complete-short").innerHTML= render(completeShort);
-
-      const tagText = state.activeTag ? ` · tag: ${state.activeTag}` : "";
-      const qText   = state.q         ? ` · 搜索: "${state.q}"`      : "";
-      $("#resultInfo").textContent = `共 ${filtered.length} 篇${tagText}${qText}`;
+    function updateSectionHeaders() {
+      document.querySelectorAll("[data-section]").forEach(el => {
+        el.classList.toggle("section-toggle--active",
+          state.activeSection === el.getAttribute("data-section"));
+      });
     }
 
-    // ── UI Bindings (set up once, use event delegation for dynamic elements) ──
+    function renderPagination(page, totalPages) {
+      const el = $("#pagination");
+      if (!el) return;
+      if (totalPages <= 1) { el.classList.add("hidden"); return; }
+      el.classList.remove("hidden");
+      el.innerHTML = `
+        <button class="btn" id="pagePrev" ${page <= 1 ? "disabled" : ""}>← 上一页</button>
+        <span class="muted">${page} / ${totalPages} 页</span>
+        <button class="btn" id="pageNext" ${page >= totalPages ? "disabled" : ""}>下一页 →</button>`;
+      $("#pagePrev")?.addEventListener("click", () => {
+        if (state.page > 1) { state.page--; applyFilters(); scrollToWorks(); }
+      });
+      $("#pageNext")?.addEventListener("click", () => {
+        if (state.page < totalPages) { state.page++; applyFilters(); scrollToWorks(); }
+      });
+    }
+
+    function scrollToWorks() {
+      const el = $("#works");
+      if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: "smooth" });
+    }
+
+    function applyFilters() {
+      // 1. filter + section
+      let filtered = state.works.filter(w =>
+        matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
+      if (state.activeSection) {
+        filtered = filtered.filter(w => getSectionKey(w) === state.activeSection);
+      }
+
+      const total = filtered.length;
+
+      // 2. sort by section order
+      const ORDER = { "serial": 0, "complete-long": 1, "complete-short": 2 };
+      filtered.sort((a, b) => ORDER[getSectionKey(a)] - ORDER[getSectionKey(b)]);
+
+      // 3. paginate
+      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+      if (state.page > totalPages) state.page = totalPages;
+      const pageWorks = filtered.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+      const isPaging  = total > PAGE_SIZE;
+
+      // 4. render each section
+      SECTION_KEYS.forEach(key => {
+        const listEl    = $(`#list-${key}`);
+        const sectionEl = listEl?.closest(".works-section");
+        if (!listEl || !sectionEl) return;
+
+        // hide non-active sections when section filter is on
+        if (state.activeSection && key !== state.activeSection) {
+          sectionEl.style.display = "none";
+          return;
+        }
+
+        const works = pageWorks.filter(w => getSectionKey(w) === key);
+
+        // hide empty sections when paginating (cleaner page view)
+        if (isPaging && works.length === 0) {
+          sectionEl.style.display = "none";
+          return;
+        }
+
+        sectionEl.style.display = "";
+        listEl.innerHTML = works.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+      });
+
+      // 5. pagination controls
+      renderPagination(state.page, totalPages);
+
+      // 6. result info
+      const tagText = state.activeTag     ? ` · tag: ${state.activeTag}`                : "";
+      const qText   = state.q             ? ` · 搜索: "${state.q}"`                     : "";
+      const secText = state.activeSection ? ` · ${SECTION_LABELS[state.activeSection]}` : "";
+      $("#resultInfo").textContent = `共 ${total} 篇${tagText}${qText}${secText}`;
+    }
+
+    // ── UI Bindings ───────────────────────────────────────────────────────
 
     function bindUI() {
       $("#q").addEventListener("input", e => {
         state.q = e.target.value.trim();
+        state.page = 1;
         applyFilters();
       });
 
@@ -202,15 +333,28 @@
         if (!b) return;
         const tag = b.getAttribute("data-chip");
         state.activeTag = state.activeTag === tag ? null : tag;
+        state.page = 1;
         renderChips();
         applyFilters();
       });
 
-      // In-card tag buttons (event delegation — no per-render rebinding)
+      // Sections: section toggle headers + in-card tag buttons
       $(".sections").addEventListener("click", e => {
+        // Section header toggle
+        const h = e.target.closest("[data-section]");
+        if (h) {
+          const sec = h.getAttribute("data-section");
+          state.activeSection = state.activeSection === sec ? null : sec;
+          state.page = 1;
+          updateSectionHeaders();
+          applyFilters();
+          return;
+        }
+        // Tag click in work card
         const b = e.target.closest("[data-tag]");
         if (!b) return;
         state.activeTag = b.getAttribute("data-tag");
+        state.page = 1;
         renderChips();
         applyFilters();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -219,7 +363,10 @@
       $("#resetBtn").addEventListener("click", () => {
         state.q = "";
         state.activeTag = null;
+        state.activeSection = null;
+        state.page = 1;
         $("#q").value = "";
+        updateSectionHeaders();
         renderChips();
         applyFilters();
       });
