@@ -1,0 +1,26 @@
+{
+  "id": "tiandian",
+  "title": "【莎朝耀】甜点",
+  "status": "complete",
+  "type": "long",
+  "updated": "2026-02-14",
+  "words": 26250,
+  "summary": "普设，耀儿被罗莎4i之后狠狠抛弃 / 结果分手七个月又被一则电话叫回家 / 一回家，莫名其妙多了一个男主人 / 2026情人节",
+  "tags": {
+    "cp": ["China/England ","China/Female England"],
+    "characters": ["Female England","China", "England","HongKong"],
+    "rating": ["Not Rated"],
+    "fandom": ["Hetalia"],
+    "warnings": ["Creator Chose Not To Use Archive Warnings"],
+    "custom": ["4i","调教","女上位","3p"]
+  },
+  "chapters": [
+    { "n": 1, "title": "Chapter 1", "src": "/data/works/tiandian/1.html" },
+    { "n": 2, "title": "Chapter 2", "src": "/data/works/tiandian/2.html" },
+    { "n": 3, "title": "Chapter 3", "src": "/data/works/tiandian/3.html" },
+    { "n": 4, "title": "Chapter 4", "src": "/data/works/tiandian/4.html" },
+    { "n": 5, "title": "Chapter 5", "src": "/data/works/tiandian/5.html" },
+    { "n": 6, "title": "Chapter 6", "src": "/data/works/tiandian/6.html" },
+    { "n": 7, "title": "Chapter 7", "src": "/data/works/tiandian/7.html" }
+  ]
+}
