@@ -7,18 +7,19 @@
   <meta name="color-scheme" content="dark light" />
   <link rel="stylesheet" href="/style.css" />
   <style>
-  /* Force topnav font (bypass external CSS cache) */
+  /* Bypass external CSS cache */
   .topnav a {
-    font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
-    font-style: italic;
-    color: var(--red);
+    font-family: var(--font);
+    font-style: normal;
+    color: rgba(233,233,234,0.5);
   }
+  .topnav a:hover { color: var(--text); }
   @media (max-width: 640px) {
     .site-header { flex-direction: row; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 0; }
     .brand__name { font-size: 12px; letter-spacing: 1px; }
     .brand__sub  { font-size: 8px; letter-spacing: 0.5px; margin-top: 2px; }
-    .topnav { gap: 0; margin-left: auto; }
-    .topnav a { padding: 5px 6px; font-size: 11px; letter-spacing: 0; }
+    .topnav { gap: 0; width: auto; margin-left: auto; }
+    .topnav a { padding: 5px 7px; font-size: 11.5px; }
   }
   /* Section toggle headers */
   .section-toggle {
