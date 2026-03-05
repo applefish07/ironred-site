@@ -1,0 +1,24 @@
+{
+  "id": "ruby",
+  "title": "【好茶家族】力大砖飞",
+  "status": "连载",
+  "type": "serial",
+  "words": 12737,
+  "updated": "2026-02-19",
+  "summary": "普设，异色 / 抽象搞笑，wy创业",
+  "tags": {
+    "cp": ["China/England"],
+    "characters": ["China", "England","Hongkong"],
+    "rating": ["Not Rated"],
+    "fandom": ["Hetalia"],
+    "warnings": ["No Archive Warnings Apply"]
+  },
+  "chapters": [
+    { "n": 1, "title": "Chapter 1", "src": "/data/works/lidazhuanfei/1.html" },
+    { "n": 2, "title": "Chapter 2", "src": "/data/works/lidazhaunfei/2.html" },
+    { "n": 3, "title": "Chapter 3", "src": "/data/works/lidazhuanfei/3.html" },
+    { "n": 4, "title": "Chapter 4", "src": "/data/works/lidazhuanfei/4.html" },
+    { "n": 5, "title": "Chapter 5", "src": "/data/works/lidazhuanfei/5.html" },
+    { "n": 6, "title": "Chapter 6", "src": "/data/works/lidazhuanfei/6.html" }
+  ]
+}
