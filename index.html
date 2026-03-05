@@ -13,7 +13,7 @@
     font-style: normal;
     color: rgba(233,233,234,0.5);
   }
-  .topnav a:hover { color: var(--text); }
+  .topnav a:hover, .topnav a:active { color: var(--red); border-color: transparent; background: transparent; }
   @media (max-width: 640px) {
     .site-header { flex-direction: row; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 0; }
     .brand__name { font-size: 12px; letter-spacing: 1px; }
@@ -160,7 +160,8 @@
   <script>
     const $ = sel => document.querySelector(sel);
 
-    const PAGE_SIZE    = 5;
+    const HOME_PREVIEW = 2;  // 首页每分区预览篇数
+    const PAGE_SIZE    = 6;  // 分区展开后每页篇数
     const PINNED_CHIPS = ["China/England", "America", "America/Russia", "England", "China"];
     const SECTION_LABELS = {
       "serial":         "连载区",
@@ -272,57 +273,53 @@
     }
 
     function applyFilters() {
-      // 1. filter + section
-      let filtered = state.works.filter(w =>
+      const base = state.works.filter(w =>
         matchesQuery(w, state.q) && matchesTag(w, state.activeTag));
+
+      const tagText = state.activeTag ? ` · tag: ${state.activeTag}` : "";
+      const qText   = state.q         ? ` · 搜索: "${state.q}"`       : "";
+
       if (state.activeSection) {
-        filtered = filtered.filter(w => getSectionKey(w) === state.activeSection);
+        // ── 分区展开视图：只显示该分区，分页 ─────────────────────────────
+        const secWorks  = base.filter(w => getSectionKey(w) === state.activeSection);
+        const total     = secWorks.length;
+        const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+        if (state.page > totalPages) state.page = totalPages;
+        const pageWorks = secWorks.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
+
+        SECTION_KEYS.forEach(key => {
+          const listEl    = $(`#list-${key}`);
+          const sectionEl = listEl?.closest(".works-section");
+          if (!sectionEl) return;
+          if (key !== state.activeSection) { sectionEl.style.display = "none"; return; }
+          sectionEl.style.display = "";
+          listEl.innerHTML = pageWorks.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
+        });
+
+        renderPagination(state.page, totalPages);
+        $("#resultInfo").textContent =
+          `${SECTION_LABELS[state.activeSection]} · 共 ${total} 篇${tagText}${qText}`;
+
+      } else {
+        // ── 首页预览视图：每分区显示前 HOME_PREVIEW 篇，无分页 ──────────
+        const total = base.length;
+        SECTION_KEYS.forEach(key => {
+          const listEl    = $(`#list-${key}`);
+          const sectionEl = listEl?.closest(".works-section");
+          if (!listEl || !sectionEl) return;
+          const secWorks = base.filter(w => getSectionKey(w) === key);
+          // 搜索/tag 过滤时隐藏无结果的分区
+          if ((state.q || state.activeTag) && secWorks.length === 0) {
+            sectionEl.style.display = "none"; return;
+          }
+          sectionEl.style.display = "";
+          listEl.innerHTML = secWorks.slice(0, HOME_PREVIEW).map(renderWorkItem).join("")
+            || `<div class="empty">暂无</div>`;
+        });
+
+        renderPagination(1, 1); // 隐藏分页
+        $("#resultInfo").textContent = `共 ${total} 篇${tagText}${qText}`;
       }
-
-      const total = filtered.length;
-
-      // 2. sort by section order
-      const ORDER = { "serial": 0, "complete-long": 1, "complete-short": 2 };
-      filtered.sort((a, b) => ORDER[getSectionKey(a)] - ORDER[getSectionKey(b)]);
-
-      // 3. paginate
-      const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-      if (state.page > totalPages) state.page = totalPages;
-      const pageWorks = filtered.slice((state.page - 1) * PAGE_SIZE, state.page * PAGE_SIZE);
-      const isPaging  = total > PAGE_SIZE;
-
-      // 4. render each section
-      SECTION_KEYS.forEach(key => {
-        const listEl    = $(`#list-${key}`);
-        const sectionEl = listEl?.closest(".works-section");
-        if (!listEl || !sectionEl) return;
-
-        // hide non-active sections when section filter is on
-        if (state.activeSection && key !== state.activeSection) {
-          sectionEl.style.display = "none";
-          return;
-        }
-
-        const works = pageWorks.filter(w => getSectionKey(w) === key);
-
-        // hide empty sections when paginating (cleaner page view)
-        if (isPaging && works.length === 0) {
-          sectionEl.style.display = "none";
-          return;
-        }
-
-        sectionEl.style.display = "";
-        listEl.innerHTML = works.map(renderWorkItem).join("") || `<div class="empty">暂无</div>`;
-      });
-
-      // 5. pagination controls
-      renderPagination(state.page, totalPages);
-
-      // 6. result info
-      const tagText = state.activeTag     ? ` · tag: ${state.activeTag}`                : "";
-      const qText   = state.q             ? ` · 搜索: "${state.q}"`                     : "";
-      const secText = state.activeSection ? ` · ${SECTION_LABELS[state.activeSection]}` : "";
-      $("#resultInfo").textContent = `共 ${total} 篇${tagText}${qText}${secText}`;
     }
 
     // ── UI Bindings ───────────────────────────────────────────────────────

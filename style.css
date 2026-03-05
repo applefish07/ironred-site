@@ -107,10 +107,10 @@ a.brand:hover .brand__name {
   font-style: normal;
   letter-spacing: 0.4px;
 }
-.topnav a:hover{
-  border-color: rgba(209,42,42,0.25);
-  background: rgba(209,42,42,0.07);
-  color: var(--text);
+.topnav a:hover,
+.topnav a:active{
+  color: var(--red);
+  -webkit-tap-highlight-color: transparent;
 }
 
 .panel{
