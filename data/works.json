@@ -70,6 +70,36 @@
     "tags": ["China/England", "Hetalia",  "China", "England","Not Rated"]
   },
   {
+    "id": "chutou",
+    "title": "出头",
+    "status": "serial",
+    "type": "long",
+    "date": "2026-02-13",
+    "chapterCount": 9,
+    "summary": "",
+    "tags": ["China/England", "Hetalia",  "China", "England","HongKong","Not Rated"]
+  },
+   {
+    "id": "stupidcandy",
+    "title": "【黯奥/无差】Stupid Candy",
+    "status": "serial",
+    "type": "long",
+    "date": "2026-02-09",
+    "chapterCount": 1,
+    "summary": "",
+    "tags": ["China/England", "Hetalia",  "China", "England","Not Rated"]
+  },
+  {
+    "id": "zzmmq",
+    "title": "【朝燕】朝朝暮暮情",
+    "status": "serial",
+    "type": "long",
+    "date": "2026-02-06",
+    "chapterCount": 1,
+    "summary": "租界时期民国架空，水手儿子出身的亚瑟/千金小姐燕",
+    "tags": ["China/England", "Hetalia",  "Female China", "England","Not Rated"]
+  },
+  {
     "id": "tiandian",
     "title": "【莎朝耀】甜点",
     "status": "complete",
